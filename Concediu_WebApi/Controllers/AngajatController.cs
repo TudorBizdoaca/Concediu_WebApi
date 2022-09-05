@@ -46,5 +46,23 @@ namespace Concediu_WebApi.Controllers
                 FirstOrDefault();
             return t;
         }
+        [HttpGet("GetAngajatiFull")]
+        public List<Angajat> GetAngajatiFull()
+        {
+            
+            
+                
+             return _context.Angajats.
+                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.TipConcediu).
+                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.StareConcediu).
+                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.Inlocuitor).
+                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.TipConcediu).
+                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.StareConcediu).
+                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.Angajat).
+                    Select(x => x).
+                    ToList();
+                
+            
+        }
     }
 }
