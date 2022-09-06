@@ -96,10 +96,8 @@ namespace Concediu_WebApi.Models
 
                 entity.Property(e => e.ZileConcediu).HasDefaultValueSql("((21))");
 
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.InverseManager)
-                    .HasForeignKey(d => d.ManagerId)
-                    .HasConstraintName("FK__Angajat__manager__38996AB5");
+                entity.HasOne(d => d.Manager);
+                    
             });
 
             modelBuilder.Entity<Concediu>(entity =>
@@ -131,10 +129,8 @@ namespace Concediu_WebApi.Models
                     .HasForeignKey(d => d.AngajatId)
                     .HasConstraintName("FK__Concediu__angaja__4222D4EF");
 
-                entity.HasOne(d => d.Inlocuitor)
-                    .WithMany(p => p.ConcediuInlocuitors)
-                    .HasForeignKey(d => d.InlocuitorId)
-                    .HasConstraintName("FK__Concediu__inlocu__403A8C7D");
+                entity.HasOne(d => d.Inlocuitor);
+                    
 
                 entity.HasOne(d => d.StareConcediu)
                     .WithMany(p => p.Concedius)
