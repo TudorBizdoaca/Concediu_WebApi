@@ -24,8 +24,8 @@ namespace Concediu_WebApi.Controllers
             return _context.Angajats.Select(x => x).Where(x => x.Email == email && x.Parola == parola).FirstOrDefault();
         }
 
-        [HttpPost]
-        public ActionResult UpdateAngajat(Angajat angajat)
+        [HttpPost("UpdateAngajat")]
+        public ActionResult PostUpdateAngajat(Angajat angajat)
         {
             var result = _context.Angajats.SingleOrDefault(a => a.Id == angajat.Id);
 

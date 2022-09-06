@@ -22,7 +22,8 @@ namespace Concediu_WebApi.Controllers
         {
             if (email != null && parola != null)
             {
-                return _context.Angajats.Select(x => x).Where(x => x.Email == email && x.Parola == parola).FirstOrDefault();
+                var result = _context.Angajats.Select(x => x).Where(x => x.Email == email && x.Parola == parola).FirstOrDefault();
+                return result;
             }
             else
             {
