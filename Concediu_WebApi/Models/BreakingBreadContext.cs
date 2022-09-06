@@ -23,11 +23,7 @@ namespace Concediu_WebApi.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server =ts2112\\SQLEXPRESS; Database =BreakingBread; User Id =internship2022; Password =int; MultipleActiveResultSets = true");
-            }
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -96,10 +92,8 @@ namespace Concediu_WebApi.Models
 
                 entity.Property(e => e.ZileConcediu).HasDefaultValueSql("((21))");
 
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.InverseManager)
-                    .HasForeignKey(d => d.ManagerId)
-                    .HasConstraintName("FK__Angajat__manager__38996AB5");
+                entity.HasOne(d => d.Manager);
+                    
             });
 
             modelBuilder.Entity<Concediu>(entity =>
@@ -131,10 +125,8 @@ namespace Concediu_WebApi.Models
                     .HasForeignKey(d => d.AngajatId)
                     .HasConstraintName("FK__Concediu__angaja__4222D4EF");
 
-                entity.HasOne(d => d.Inlocuitor)
-                    .WithMany(p => p.ConcediuInlocuitors)
-                    .HasForeignKey(d => d.InlocuitorId)
-                    .HasConstraintName("FK__Concediu__inlocu__403A8C7D");
+                entity.HasOne(d => d.Inlocuitor);
+                    
 
                 entity.HasOne(d => d.StareConcediu)
                     .WithMany(p => p.Concedius)
