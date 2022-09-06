@@ -24,8 +24,8 @@ namespace Concediu_WebApi.Controllers
         [HttpGet]
         public List<Concediu> Get()
         {
-            return _context.Concedius.Include(x=>x.TipConcediu).Select(x => new Concediu() { Id = x.Id, DataInceput = x.DataInceput }).Where(x => x.Id == 1).ToList();
+            return _context.Concedius.Select(x => x).ToList();
 
         }
-    }
+    }   
 }
