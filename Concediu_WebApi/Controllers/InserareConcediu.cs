@@ -21,8 +21,8 @@ namespace Concediu_WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet("[InserareConcediu]")]
-        public 
+        //[HttpGet("[InserareConcediu]")]
+        //public 
 
     }
 
