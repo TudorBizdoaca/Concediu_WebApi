@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using System.Runtime.InteropServices;
+
 namespace Concediu_WebApi.Controllers
 {
     [Route("api/[controller]")]
@@ -21,13 +23,13 @@ namespace Concediu_WebApi.Controllers
         public List<Angajat> GetAngajati()
         {
 
-            return _context.Angajats.Select(x=>x).ToList();
+            return _context.Angajats.Select(x => x).ToList();
         }
         [HttpGet("GetAngajat")]
         public Angajat GetAngajat(int IdAngajat)
         {
             Angajat t = new Angajat();
-            t =_context.Angajats.Select(x => x).Where(x => x.Id == IdAngajat).FirstOrDefault();
+            t = _context.Angajats.Select(x => x).Where(x => x.Id == IdAngajat).FirstOrDefault();
             return t;
         }
         [HttpGet("GetAngajatFull")]
@@ -42,7 +44,7 @@ namespace Concediu_WebApi.Controllers
                 Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.StareConcediu).
                 Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.Angajat).
                 Select(x => x).
-                Where(x  =>x.Id == IdAngajat).
+                Where(x => x.Id == IdAngajat).
                 FirstOrDefault();
             return t;
         }
@@ -50,19 +52,36 @@ namespace Concediu_WebApi.Controllers
         public List<Angajat> GetAngajatiFull()
         {
             
-            
-                
-             return _context.Angajats.
-                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.TipConcediu).
-                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.StareConcediu).
-                    Include(x => x.ConcediuAngajats).ThenInclude(s => s.Inlocuitor).
-                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.TipConcediu).
-                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.StareConcediu).
-                    Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.Angajat).
-                    Select(x => x).
-                    ToList();
-                
-            
+
+
+            return _context.Angajats.
+                   Include(x => x.ConcediuAngajats).ThenInclude(s => s.TipConcediu).
+                   Include(x => x.ConcediuAngajats).ThenInclude(s => s.StareConcediu).
+                   Include(x => x.ConcediuAngajats).ThenInclude(s => s.Inlocuitor).
+                   Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.TipConcediu).
+                   Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.StareConcediu).
+                   Include(x => x.ConcediuInlocuitors).ThenInclude(s => s.Angajat).
+                   Select(x => x).
+                   ToList();
+
+
         }
-    }
+        [HttpPut("UpdateAngajat")]
+        public void UpdateAngajat([FromBody]Angajat angajat)
+        {
+            Angajat t = new Angajat();
+            t = GetAngajat(angajat.Id);
+            t.ManagerId = angajat.ManagerId;
+          
+            t.Manager = GetAngajat((int)t.ManagerId);
+            /*Add methods for Lists
+               public virtual ICollection<Concediu> ConcediuAngajats { get; set; }
+        public virtual ICollection<Concediu> ConcediuInlocuitors { get; set; }
+        public virtual ICollection<Angajat> InverseManager { get; set; } */
+            _context.SaveChanges();
+        }
+
+    
+    }   
+    
 }
