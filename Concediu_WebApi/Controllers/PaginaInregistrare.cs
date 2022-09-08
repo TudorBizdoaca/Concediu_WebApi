@@ -34,6 +34,12 @@ namespace Concediu_WebApi.Controllers
         }
 
 
+        [HttpGet("GetAngajatByEmail")]
+        public Angajat getAngajatByEmail(string email)
+        {
+            return _context.Angajats.Select(x => x).Where(x => x.Email == email).FirstOrDefault();
+        }
+
 
       
 
