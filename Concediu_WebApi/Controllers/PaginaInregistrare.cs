@@ -5,8 +5,8 @@ using System.Security.Cryptography;
 
 namespace Concediu_WebApi.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class PaginaInregistrare : ControllerBase
     { 
         private readonly ILogger<PaginaInregistrare> _logger;
@@ -18,7 +18,7 @@ namespace Concediu_WebApi.Controllers
         }
 
         [HttpPost("InsertAngajat")]
-        public ActionResult Get(Angajat ang)
+        public ActionResult InsertAngajat(Angajat ang)
         {
 
             _context.Angajats.Add(ang);
