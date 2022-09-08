@@ -62,5 +62,28 @@ namespace Concediu_WebApi.Controllers
             return _context.StareConcedius.ToList();
         }
 
+
+        [HttpGet("GetConcediiDupaNumeAngajat")]
+        public List<Concediu> GetConcediiDupaNumeAngajat(string nume)
+        {
+
+            return _context.Concedius.Include(x => x.Angajat)
+               .Include(x => x.StareConcediu)
+               .Include(x => x.TipConcediu).Where(x=>x.Angajat.Nume.Contains(nume))
+               .Select(x => new Concediu
+               {
+                   Angajat = new Angajat { Nume = x.Angajat.Nume, Prenume = x.Angajat.Prenume, Manager = new Angajat { Nume = x.Angajat.Manager.Nume, Prenume = x.Angajat.Manager.Prenume } },
+                   TipConcediu = new TipConcediu { Nume = x.TipConcediu.Nume },
+                   Inlocuitor = new Angajat { Nume = x.Inlocuitor.Nume, Prenume = x.Inlocuitor.Prenume },
+                   DataInceput = x.DataInceput,
+                   DataSfarsit = x.DataSfarsit,
+                   StareConcediu = new StareConcediu { Nume = x.StareConcediu.Nume },
+                   Id = x.Id
+
+               })
+               .ToList();
+
+        }
+
     }
 }
