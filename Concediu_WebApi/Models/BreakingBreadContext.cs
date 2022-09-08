@@ -23,11 +23,7 @@ namespace Concediu_WebApi.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server =ts2112\\SQLEXPRESS; Database =BreakingBread; User Id =internship2022; Password =int; MultipleActiveResultSets = true");
-            }
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -82,7 +78,7 @@ namespace Concediu_WebApi.Models
                     .IsUnicode(false)
                     .HasColumnName("parola");
 
-                entity.Ignore(e=>e.Poza);//Property(e => e.Poza).HasColumnName("poza"));
+                entity.Property(e => e.Poza).HasColumnName("poza");
 
                 entity.Property(e => e.Prenume)
                     .HasMaxLength(50)
