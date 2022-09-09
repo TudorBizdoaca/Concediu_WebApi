@@ -28,7 +28,7 @@ namespace Concediu_WebApi.Controllers
         
         public List<Angajat> getIdNume()
         {
-            return _context.Angajats.Select(x => new Angajat { Id = x.Id, Nume = x.Nume , Prenume = x.Prenume}).ToList();
+            return _context.Angajats.Select(x => new Angajat { Id = x.Id, Nume = x.Nume + " " + x.Prenume}).ToList();
         }
 
         [HttpGet("GetAngajatId")]
