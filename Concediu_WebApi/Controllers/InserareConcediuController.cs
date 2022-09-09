@@ -1,11 +1,7 @@
 ﻿using Concediu_WebApi.Models;
 using Concediu_WebApi.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-
-
 
 namespace Concediu_WebApi.Controllers
 {
@@ -30,24 +26,23 @@ namespace Concediu_WebApi.Controllers
             return _context.TipConcedius.Select(x => x).ToList();
         }
         [HttpGet("getZileConcediu")]
-        public int[] getZileConcediu(int idAngajat)
+        public Dictionary<int,int> getZileConcediu(int idAngajat)
         {
-            List<Concediu> concedii = _context.Concedius.Where(x => x.AngajatId == idAngajat && x.DataInceput.Year == DateTime.Now.Year).Select(x => x).ToList();
+            List<Concediu> concedii = _context.Concedius.Where(x => x.AngajatId == idAngajat && x.DataInceput.Year == DateTime.Now.Year).Include(x => x.StareConcediu).Select(x => x).ToList();
             List<TipConcediu> tipuriConcediu = _context.TipConcedius.Select(x => x).ToList();
-            int[] zileConcediuDinTip = new int[tipuriConcediu.Count()];
+            Dictionary<int, int> zileConcediuPerTip = new Dictionary<int, int>();
             foreach (TipConcediu tc in tipuriConcediu)
             {
                 if (tc.Nume == "medical")
-                    zileConcediuDinTip[tc.Id - 1] = 90;
+                    zileConcediuPerTip.Add(tc.Id, 90);
                 else
-                    zileConcediuDinTip[tc.Id - 1] = 21;
+                    zileConcediuPerTip.Add(tc.Id, 21);
             }
-            foreach (TipConcediu tipconcediu in tipuriConcediu)
-            { foreach (Concediu concediu in concedii)
-                    if (concediu.TipConcediu.Id == tipconcediu.Id)
-                        zileConcediuDinTip[tipconcediu.Id - 1] -= DateCalculator.bussinessDaysBetween(concediu.DataInceput, concediu.DataSfarsit);
-            }
-            return zileConcediuDinTip;
+           foreach (Concediu concediu in concedii)
+                    if(concediu.StareConcediu.Nume != "respins")
+                        zileConcediuPerTip[(int)concediu.TipConcediuId] -= DateCalculator.bussinessDaysBetween(concediu.DataInceput, concediu.DataSfarsit);
+
+            return zileConcediuPerTip;
         }
         [HttpPut("setZileConcediu")]
         public void setZileConcediu(int idAngajat, int Zile)
@@ -72,13 +67,13 @@ namespace Concediu_WebApi.Controllers
             {
                 if ((c.DataInceput <= dataFinal) && (c.DataSfarsit >= dataInceput) && c.AngajatId == id)
                     return true;
-            }       
+            }
             return false;
         }
         [HttpGet("getAngajati")]
         public List<Angajat> getAngajati(int Id)
         {
-            return _context.Angajats.Where(x=>x.Id != Id).Select(x => new Angajat { Id = x.Id , Nume = x.Nume +" "+ x.Prenume}).ToList();
+            return _context.Angajats.Where(x => x.Id != Id).Select(x => new Angajat { Id = x.Id, Nume = x.Nume + " " + x.Prenume }).ToList();
         }
     }
 
