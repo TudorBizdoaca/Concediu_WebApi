@@ -29,7 +29,7 @@ namespace Concediu_WebApi.Controllers
                     Comentarii = x.Comentarii,
                     Angajat = new Angajat { Nume = x.Angajat.Nume + " " + x.Angajat.Prenume, Manager = new Angajat { Nume = x.Angajat.Manager.Nume + " " +  x.Angajat.Manager.Prenume } },
                     TipConcediu = new TipConcediu { Nume = x.TipConcediu.Nume },
-                    Inlocuitor = new Angajat { Nume = x.Inlocuitor.Nume, Prenume = x.Inlocuitor.Prenume },
+                    Inlocuitor = new Angajat { Nume = x.Inlocuitor.Nume + " " +  x.Inlocuitor.Prenume },
                     DataInceput = x.DataInceput,
                     DataSfarsit = x.DataSfarsit,
                     StareConcediu = new StareConcediu { Nume = x.StareConcediu.Nume },
