@@ -19,12 +19,21 @@ namespace Concediu_WebApi.Controllers
             _logger = logger;
             _context = context;
         }
-        [HttpGet("GetAngajati")]
-        public List<Angajat> GetAngajati()
-        {
 
-            return _context.Angajats.Select(x => x).ToList();
+        [HttpGet("GetNrAngajati")]
+        public int GetNrAngajati()
+        {
+            return _context.Angajats.Count();
         }
+
+        [HttpGet("GetAngajati")]
+        public List<Angajat> GetAngajati(int position)
+        {
+            var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
+
+            return nextPage;
+        }
+
         [HttpGet("GetAngajat")]
         public Angajat GetAngajat(int IdAngajat)
         {

@@ -2,6 +2,7 @@
 using Concediu_WebApi.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Concediu_WebApi.Controllers
 {
@@ -13,7 +14,7 @@ namespace Concediu_WebApi.Controllers
     {
         private readonly ILogger<PaginaInregistrare> _logger;
         private readonly BreakingBreadContext _context;
-
+        List<ZileLibereAnCurent> ZileLibere = new List<ZileLibereAnCurent>();
         public InserareConcediuController(ILogger<PaginaInregistrare> logger, BreakingBreadContext context)
         {
             _logger = logger;
@@ -26,8 +27,9 @@ namespace Concediu_WebApi.Controllers
             return _context.TipConcedius.Select(x => x).ToList();
         }
         [HttpGet("getZileConcediu")]
-        public Dictionary<int,int> getZileConcediu(int idAngajat)
+        public async Task<Dictionary<int, int>> getZileConcediuAsync(int idAngajat)
         {
+            ZileLibere = await GetLibereAsync(2022);
             List<Concediu> concedii = _context.Concedius.Where(x => x.AngajatId == idAngajat && x.DataInceput.Year == DateTime.Now.Year).Include(x => x.StareConcediu).Select(x => x).ToList();
             List<TipConcediu> tipuriConcediu = _context.TipConcedius.Select(x => x).ToList();
             Dictionary<int, int> zileConcediuPerTip = new Dictionary<int, int>();
@@ -38,9 +40,9 @@ namespace Concediu_WebApi.Controllers
                 else
                     zileConcediuPerTip.Add(tc.Id, 21);
             }
-           foreach (Concediu concediu in concedii)
-                    if(concediu.StareConcediu.Nume != "respins")
-                        zileConcediuPerTip[(int)concediu.TipConcediuId] -= DateCalculator.bussinessDaysBetween(concediu.DataInceput, concediu.DataSfarsit);
+            foreach (Concediu concediu in concedii)
+                if (concediu.StareConcediu.Nume != "respins")
+                        zileConcediuPerTip[(int)concediu.TipConcediuId] -= DateCalculator.businessDaysBetween(concediu.DataInceput, concediu.DataSfarsit, ZileLibere);
 
             return zileConcediuPerTip;
         }
@@ -74,6 +76,19 @@ namespace Concediu_WebApi.Controllers
         public List<Angajat> getAngajati(int Id)
         {
             return _context.Angajats.Where(x => x.Id != Id).Select(x => new Angajat { Id = x.Id, Nume = x.Nume + " " + x.Prenume }).ToList();
+        }
+
+
+        [HttpGet("zileLibereLegale")]
+        public async Task<List<ZileLibereAnCurent>> GetLibereAsync(int An)
+        {
+            List<ZileLibereAnCurent> ZileLibereLista;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://zilelibere.webventure.ro/api/" + An);
+            string responseBody = await response.Content.ReadAsStringAsync();
+           
+            ZileLibereLista = JsonConvert.DeserializeObject<List<ZileLibereAnCurent>>(responseBody);
+            return ZileLibereLista;
         }
     }
 

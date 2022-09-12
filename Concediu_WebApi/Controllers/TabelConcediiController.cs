@@ -140,5 +140,32 @@ namespace Concediu_WebApi.Controllers
             return _context.TipConcedius.Select(x => x).ToList();
         }
 
+
+        [HttpGet("GetConcediiDupaFiltre")]
+        public List<Concediu> GetConcediiDupaFiltre(string? nume, int? stareId, int? tipId, DateTime? dataInceput, DateTime? dataFinal)
+        {
+            return _context.Concedius.Include(x => x.Angajat)
+             .Include(x => x.StareConcediu)
+             .Include(x => x.TipConcediu)
+             .Where(x => nume == null || x.Angajat.Nume.Contains(nume))
+             .Where(x => stareId !=0? x.StareConcediuId == stareId:true)
+             .Where(x => tipId!=0?x.TipConcediuId == tipId:true)
+             .Where(x => (dataInceput != null && dataFinal!= null)?
+             (x.DataInceput.Date >= dataInceput.Value.Date && x.DataInceput.Date <= dataFinal.Value.Date
+                                    && x.DataSfarsit.Date >= dataInceput.Value.Date && x.DataSfarsit.Date <= dataFinal.Value.Date):true)
+             .Select(x => new Concediu
+             {
+                 Angajat = new Angajat { Nume = x.Angajat.Nume, Prenume = x.Angajat.Prenume, Manager = new Angajat { Nume = x.Angajat.Manager.Nume, Prenume = x.Angajat.Manager.Prenume } },
+                 TipConcediu = new TipConcediu { Nume = x.TipConcediu.Nume },
+                 Inlocuitor = new Angajat { Nume = x.Inlocuitor.Nume, Prenume = x.Inlocuitor.Prenume },
+                 DataInceput = x.DataInceput,
+                 DataSfarsit = x.DataSfarsit,
+                 StareConcediu = new StareConcediu { Nume = x.StareConcediu.Nume },
+                 Id = x.Id
+
+             })
+             .ToList();
+        }
+
     }
 }
