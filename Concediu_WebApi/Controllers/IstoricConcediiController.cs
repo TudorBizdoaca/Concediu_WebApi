@@ -28,6 +28,7 @@ namespace Concediu_WebApi.Controllers
                 { DataInceput = x.DataInceput,
                     DataSfarsit = x.DataSfarsit,
                     Comentarii = x.Comentarii,
+                    MotivRespingere = x.MotivRespingere,
                     Inlocuitor = new Angajat()
                     {
                         Nume = x.Inlocuitor.Nume,
