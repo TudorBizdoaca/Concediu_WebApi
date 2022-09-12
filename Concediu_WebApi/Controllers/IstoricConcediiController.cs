@@ -42,7 +42,7 @@ namespace Concediu_WebApi.Controllers
                         Nume = x.StareConcediu.Nume
                     }
 
-                }).ToList();
+                }).OrderByDescending(x=>x.DataInceput.Date).ToList();
             
         }
     }
