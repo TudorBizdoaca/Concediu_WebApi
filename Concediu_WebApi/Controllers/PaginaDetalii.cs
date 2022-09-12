@@ -33,7 +33,8 @@ namespace Concediu_WebApi.Controllers
                     DataInceput = x.DataInceput,
                     DataSfarsit = x.DataSfarsit,
                     StareConcediu = new StareConcediu { Nume = x.StareConcediu.Nume },
-                    Id = x.Id
+                    Id = x.Id,
+                    MotivRespingere = x.MotivRespingere
 
                 }).ToList().FirstOrDefault();
         }
