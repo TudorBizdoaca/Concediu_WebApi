@@ -16,10 +16,16 @@ namespace Concediu_WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet("GetConcedii")]
-        public List<Concediu> GetConcedii()
+        [HttpGet("GetNrConcedii")]
+        public int GetNrConcedii()
         {
-            return _context.Concedius.Include(x => x.Angajat)
+            return _context.Concedius.Count();
+        }
+
+        [HttpGet("GetConcedii")]
+        public List<Concediu> GetConcedii(int position)
+        {
+            var nextPage = _context.Concedius.Include(x => x.Angajat)
                 .Include(x => x.StareConcediu)
                 .Include(x => x.TipConcediu)
                 .Select(x => new Concediu
@@ -31,7 +37,12 @@ namespace Concediu_WebApi.Controllers
                     Id = x.Id
 
                 })
+                .OrderBy(x => x.Id)
+                .Skip(position)
+                .Take(10)
                 .ToList();
+
+            return nextPage;
         }
 
 
