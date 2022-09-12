@@ -5,7 +5,7 @@ namespace Concediu_WebApi.Models
     public class Date
     {
 
-       public string date { get; set; }
+       public DateTime date { get; set; }
      
         public string weekDay { get; set; }
     }

@@ -13,7 +13,7 @@ namespace Concediu_WebApi.Models
         public string? Comentarii { get; set; }
         public int? StareConcediuId { get; set; }
         public int? AngajatId { get; set; }
-
+        
         public virtual Angajat? Angajat { get; set; }
         public virtual Angajat? Inlocuitor { get; set; }
         public virtual StareConcediu? StareConcediu { get; set; }
