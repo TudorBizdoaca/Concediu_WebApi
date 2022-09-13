@@ -25,7 +25,7 @@ namespace Concediu_WebApi.Controllers
         {
             if (esteAdmin == false)
             {
-                return _context.Angajats.Select(x => x.ManagerId == id).Count();
+                return _context.Angajats.Select(x => x).Where(x=>x.ManagerId == id).Count();
             }
             else
             {
