@@ -38,12 +38,12 @@ namespace Concediu_WebApi.Controllers
         {
             if (esteAdmin == false)
             {
-                var nextPage = _context.Angajats.Select(x => x).Where(x => x.ManagerId == id).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
+                var nextPage = _context.Angajats.Select(x => x).Where(x => x.ManagerId == id).OrderBy(x => x.Id).Skip(position).Take(15).ToList();
                 return nextPage;
             }
             else
             {
-                var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
+                var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(15).ToList();
 
                 return nextPage;
             }
