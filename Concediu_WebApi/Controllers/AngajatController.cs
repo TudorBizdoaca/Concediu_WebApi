@@ -21,17 +21,33 @@ namespace Concediu_WebApi.Controllers
         }
 
         [HttpGet("GetNrAngajati")]
-        public int GetNrAngajati()
+        public int GetNrAngajati(int id, bool esteAdmin)
         {
-            return _context.Angajats.Count();
+            if (esteAdmin == false)
+            {
+                return _context.Angajats.Select(x => x.ManagerId == id).Count();
+            }
+            else
+            {
+                return _context.Angajats.Count();
+            }
         }
 
         [HttpGet("GetAngajati")]
-        public List<Angajat> GetAngajati(int position)
+        public List<Angajat> GetAngajati(int position, int id, bool esteAdmin)
         {
-            var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
+            if (esteAdmin == false)
+            {
+                var nextPage = _context.Angajats.Select(x => x).Where(x => x.ManagerId == id).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
+                return nextPage;
+            }
+            else
+            {
+                var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(10).ToList();
 
-            return nextPage;
+                return nextPage;
+            }
+            
         }
 
         [HttpGet("GetAngajat")]
