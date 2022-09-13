@@ -158,7 +158,7 @@ namespace Concediu_WebApi.Controllers
             return _context.Concedius.Include(x => x.Angajat)
              .Include(x => x.StareConcediu)
              .Include(x => x.TipConcediu)
-             .Where(x => nume == null || x.Angajat.Nume.Contains(nume))
+             .Where(x => nume == null? true: x.Angajat.Nume.Contains(nume))
              .Where(x => stareId !=0? x.StareConcediuId == stareId:true)
              .Where(x => tipId!=0?x.TipConcediuId == tipId:true)
              .Where(x => (dataInceput != null && dataFinal!= null)?
