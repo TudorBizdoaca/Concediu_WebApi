@@ -53,7 +53,7 @@ namespace Concediu_WebApi.Controllers
                 .Where(x=> x.Angajat.Manager.Id == id)
                 .OrderBy(x => x.Id)
                 .Skip(position)
-                .Take(10)
+                .Take(15)
                 .ToList();
 
                 return nextPage;
@@ -76,7 +76,7 @@ namespace Concediu_WebApi.Controllers
                 })
                 .OrderBy(x => x.Id)
                 .Skip(position)
-                .Take(10)
+                .Take(15)
                 .ToList();
 
                 return nextPage;
