@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 using System.Runtime.InteropServices;
 
 namespace Concediu_WebApi.Controllers
@@ -57,11 +56,16 @@ namespace Concediu_WebApi.Controllers
         }
 
         [HttpGet("GetTotiAngajatii")]
-        public List<Angajat> GetTotiAngajatii(int position)
+        public List<Angajat> GetTotiAngajatii(int position, string? query)
         {
-            var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(15).ToList();
-
-            return nextPage;
+            if (string.IsNullOrEmpty(query))
+            {
+                return _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(12).ToList();
+            }
+            else
+            {
+                return _context.Angajats.Select(x => x).OrderBy(x => x.Id).Where(x=> x.Nume.Contains(query) || x.Prenume.Contains(query)).Skip(position).Take(12).ToList();
+            }
         }
 
         [HttpGet("GetAngajat")]
