@@ -50,6 +50,20 @@ namespace Concediu_WebApi.Controllers
             
         }
 
+        [HttpGet("GetNrTotiAngajatii")]
+        public int GetNrTotiAngajatii()
+        {
+            return _context.Angajats.Count();
+        }
+
+        [HttpGet("GetTotiAngajatii")]
+        public List<Angajat> GetTotiAngajatii(int position)
+        {
+            var nextPage = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(15).ToList();
+
+            return nextPage;
+        }
+
         [HttpGet("GetAngajat")]
         public Angajat GetAngajat(int IdAngajat)
         {
