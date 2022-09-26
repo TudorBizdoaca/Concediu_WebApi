@@ -21,7 +21,7 @@ namespace Concediu_WebApi.Controllers
         {
             if (esteAdmin == false)
             {
-                return _context.Concedius.Include(x => x.Angajat).Where(x => x.Angajat.Id == id).Count();
+                return _context.Concedius.Include(x => x.Angajat).Where(x => x.Angajat.ManagerId == id).Count();
             }
             else
             {
@@ -33,7 +33,7 @@ namespace Concediu_WebApi.Controllers
         [HttpGet("GetConcedii")]
         public List<Concediu> GetConcedii(int position, bool esteAdmin, int id)
         {
-            if (esteAdmin == false)
+            if (esteAdmin == false) 
             {
                 var nextPage = _context.Concedius.Include(x => x.Angajat)
                 .Include(x => x.StareConcediu)
