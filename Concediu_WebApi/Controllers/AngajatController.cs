@@ -1,8 +1,10 @@
 ﻿using Concediu_WebApi.Models;
+using Concediu_WebApi.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Concediu_WebApi.Controllers
 {
@@ -49,22 +51,26 @@ namespace Concediu_WebApi.Controllers
             
         }
 
-        [HttpGet("GetNrTotiAngajatii")]
-        public int GetNrTotiAngajatii()
-        {
-            return _context.Angajats.Count();
-        }
-
         [HttpGet("GetTotiAngajatii")]
-        public List<Angajat> GetTotiAngajatii(int position, string? query)
+        public DateAngajati GetTotiAngajatii(int position, string? query)
         {
             if (string.IsNullOrEmpty(query))
             {
-                return _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(12).ToList();
+                List<Angajat> listaAngajati = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Skip(position).Take(12).ToList();
+                int nrAngajati = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Count();
+
+                DateAngajati dateAngajati = new DateAngajati(listaAngajati, nrAngajati);
+
+                return dateAngajati;
             }
             else
             {
-                return _context.Angajats.Select(x => x).OrderBy(x => x.Id).Where(x=> x.Nume.Contains(query) || x.Prenume.Contains(query)).Skip(position).Take(12).ToList();
+                List<Angajat> listaAngajati = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Where(x => EF.Functions.Like(x.Nume, (query + '%')) || EF.Functions.Like(x.Prenume, (query + '%')) || EF.Functions.Like(x.Nume + " " + x.Prenume, (query + '%'))).Skip(position).Take(12).ToList();
+                int nrAngajati = _context.Angajats.Select(x => x).OrderBy(x => x.Id).Where(x => EF.Functions.Like(x.Nume, (query + '%')) || EF.Functions.Like(x.Prenume, (query + '%')) || EF.Functions.Like(x.Nume + " " + x.Prenume, (query + '%'))).Count();
+
+                DateAngajati dateAngajati = new DateAngajati(listaAngajati, nrAngajati);
+
+                return dateAngajati;
             }
         }
 
