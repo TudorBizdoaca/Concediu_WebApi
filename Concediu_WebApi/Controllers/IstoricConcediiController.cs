@@ -25,7 +25,8 @@ namespace Concediu_WebApi.Controllers
                 Include(x => x.TipConcediu).
                 Include(x => x.Inlocuitor).Where(x => x.AngajatId == Id).
                 Select(x => new Concediu
-                { DataInceput = x.DataInceput,
+                {   Id=x.Id,
+                    DataInceput = x.DataInceput,
                     DataSfarsit = x.DataSfarsit,
                     Comentarii = x.Comentarii,
                     MotivRespingere = x.MotivRespingere,

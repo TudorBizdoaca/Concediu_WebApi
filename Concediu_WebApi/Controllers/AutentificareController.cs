@@ -30,5 +30,17 @@ namespace Concediu_WebApi.Controllers
                 return null;
             }
         }
+
+        [HttpGet("UtilizatorLogat")]
+        public Angajat GetUtilizatorLogat(string email)
+        {
+            return _context.Angajats.Select(x => x).Where(x => x.Email == email).FirstOrDefault();
+        }
+
+        [HttpPost("VerificareAutentificare")]
+        public bool PostVerificareAutentificare(string userName, string password)
+        {
+            return _context.Angajats.Select(x => x).Where(x => x.Email == userName && x.Parola == password).Count() > 0 ? true : false;
+        }
     }
 }
