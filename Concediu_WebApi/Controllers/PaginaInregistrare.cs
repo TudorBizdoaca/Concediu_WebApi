@@ -33,6 +33,12 @@ namespace Concediu_WebApi.Controllers
             return Ok();
         }
 
+        [HttpGet("GetManageri")]
+        public List<Angajat> GetManageri()
+        {
+            return _context.Angajats.Where(x => x.ManagerId == null).Select(x => new Angajat { Id=x.Id, Nume=x.Nume,Prenume= x.Prenume}).ToList();
+        }
+
 
         [HttpGet("GetAngajatByEmail")]
         public Angajat getAngajatByEmail(string email)
