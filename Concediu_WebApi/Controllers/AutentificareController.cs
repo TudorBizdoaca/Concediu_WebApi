@@ -40,7 +40,7 @@ namespace Concediu_WebApi.Controllers
         [HttpPost("VerificareAutentificare")]
         public bool PostVerificareAutentificare(string userName, string password)
         {
-            return _context.Angajats.Select(x => x).Where(x => x.Email == userName && x.Parola == password).Count() > 0 ? true : false;
+            return _context.Angajats.Select(x => x).Where(x => x.Email.Equals(userName) && x.Parola.Equals(password)).Count() > 0 ? true : false;
         }
     }
 }
